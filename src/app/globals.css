@@ -1,0 +1,146 @@
+@import 'tailwindcss';
+
+:root {
+  --paper: #f7f4ee;
+  --card: #ffffff;
+  --ink: #2b2a26;
+  --quiet: #7a756a;
+  --line: #e4ded2;
+  --clay: #b3663f;
+  --sage: #6f7d5e;
+}
+
+html,
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: -apple-system, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei',
+    system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 7px;
+  border-radius: 4px;
+  font-size: 12px;
+  line-height: 18px;
+  white-space: nowrap;
+}
+
+/*
+ * 类名不能叫 .grid：Tailwind 的 .grid（display: grid）会把 <table> 变成网格容器，
+ * 导致 thead/tbody 退化成 block，表头与数据各算一套列宽，从而错位。
+ */
+table.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+/*
+ * 注意：sticky 要放在 thead 上，不能放在 th 上。
+ * 放在 th 上时，浏览器会把表头当成独立布局，列宽按表头文字重算，
+ * 结果就是表头与数据体错位。
+ */
+table.data-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+table.data-table th {
+  text-align: left;
+  font-weight: 600;
+  color: var(--quiet);
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+  background: #fbf9f5;
+}
+
+table.data-table td {
+  padding: 9px 10px;
+  border-bottom: 1px solid #f0ece4;
+  vertical-align: middle;
+}
+
+table.data-table tbody tr:hover {
+  background: #fbf9f5;
+}
+
+input[type='text'],
+input[type='search'],
+select,
+textarea {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 5px 8px;
+  font-size: 13px;
+  background: #fff;
+  color: var(--ink);
+  outline: none;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--clay);
+}
+
+.btn {
+  border: 1px solid var(--line);
+  background: #fff;
+  border-radius: 6px;
+  padding: 5px 12px;
+  font-size: 13px;
+  cursor: pointer;
+  color: var(--ink);
+}
+
+.btn:hover {
+  border-color: var(--clay);
+  color: var(--clay);
+}
+
+.btn-primary {
+  background: var(--clay);
+  border-color: var(--clay);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: #9c5636;
+  color: #fff;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+}
+
+a {
+  color: var(--clay);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}

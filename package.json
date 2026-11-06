@@ -1,0 +1,33 @@
+{
+  "name": "nuanyu-analytics",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3100",
+    "build": "next build",
+    "start": "next start -p 3100",
+    "db:up": "docker compose up -d",
+    "db:down": "docker compose down",
+    "db:reset": "docker compose down -v && docker compose up -d",
+    "db:seed": "node scripts/seed.mjs",
+    "db:reap": "curl -s -X POST http://localhost:3100/api/v1/reap -H \"x-api-key: dev-tracker-key\" | jq .",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@tailwindcss/postcss": "^4.3.4",
+    "@types/node": "^26.6.6",
+    "@types/pg": "^8.23.1",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "next": "^15.5.29",
+    "pg": "^8.23.1",
+    "postcss": "^8.5.32",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "tailwindcss": "^4.3.4",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.3"
+  }
+}
