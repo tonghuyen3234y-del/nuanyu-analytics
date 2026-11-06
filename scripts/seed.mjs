@@ -182,7 +182,7 @@ async function main() {
                 requestId,
                 isBad ? 'bad' : 'ok',
                 isBad ? '回答偏离用户意图，未给出可执行建议' : '符合预期',
-                '慧洁',
+                'pm-demo',
                 new Date(Math.min(now - 1000, startTime.getTime() + 3600_000)),
               ],
             );
@@ -212,7 +212,7 @@ async function main() {
     await client.query(
       `INSERT INTO analytics.case_records
        (request_id,title,category,severity,description,expected_behavior,status,owner,created_by)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,'慧洁')
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,'pm-demo')
        ON CONFLICT (request_id) DO NOTHING`,
       [
         requestId,
@@ -229,7 +229,7 @@ async function main() {
         '用户明确表达情绪低落，AI 未做情绪承接，直接给出「你应该多运动」类建议，语气偏指令。',
         '应先共情确认感受，再温和询问是否需要建议。',
         pick(['open', 'open', 'fixing', 'fixed']),
-        pick(['阿杰', '小林', null]),
+        pick(['dev-a', 'dev-b', null]),
       ],
     );
   }

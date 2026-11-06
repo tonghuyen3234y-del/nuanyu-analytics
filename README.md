@@ -1,9 +1,18 @@
-# 暖屿 · 轻量 Case 集后台
+# 暖屿 · AI Agent 质量与用户行为分析后台
 
-按《暖屿 AI Agent 埋点需求文档》实现的独立后台。
-**可单独运行**，产品开发完后通过 HTTP 接口直接接上，无需改动本后台。
+一个可独立运行的 AI 产品数据分析后台：**埋点采集 → Bad Case 复盘 → 用户行为分析**。
 
-技术栈对齐主产品：**Next.js + TypeScript + PostgreSQL**（把 Supabase 的连接串换成 `DATABASE_URL` 即可）。
+产品侧只需通过 HTTP 接口上报埋点，不改动本后台任何代码即可接入。
+
+技术栈：**Next.js 15 + TypeScript + PostgreSQL**。
+数据库连接串换成任意 Postgres（含 Supabase）即可，无 Vendor 锁定。
+
+### 它解决什么问题
+
+AI 产品的看板通常缺两样东西：
+
+1. **可信的坏例子率** —— 很多看板用「已入 Case ÷ 已入 Case」做分母，永远是 100%，是自证式假指标。本项目把「评审为正常」也记进 `reviews` 表，分母是全部已评审请求。
+2. **真实的用户留存** —— 只有 `session_id` 是算不出 DAU 和留存的。本项目在埋点层支持 `user_id_hash`，并且**明确标注当前用的是用户口径还是会话口径**，不假装会话数就是用户数。
 
 ---
 
@@ -27,7 +36,7 @@ npm run dev
 
 ---
 
-## 五个页面
+## 页面
 
 | 路径 | 用途 |
 |---|---|
@@ -36,7 +45,7 @@ npm run dev
 | `/runs/{request_id}` | 请求详情：**复盘主界面**，事件时间线 + 一键建 Case |
 | `/cases` | Case 集：分类打标、导出 JSON 作评测集 |
 | `/behavior` | 用户行为分析：DAU/WAU/新增/人均时长/留存 + 功能使用 + 行为漏斗 + 趋势 |
-| `/health` | 埋点自检：对应文档第 06 章 A01–A10 |
+| `/health` | 埋点自检：A01–A11，含用户标识覆盖度检查 |
 
 ---
 
@@ -197,6 +206,20 @@ examples/                 接入示例代码
 ```
 
 ---
+
+## 开源
+
+MIT License。欢迎 Issue 与 PR。
+
+```bash
+npm install
+cp .env.example .env.local
+npm run db:up && npm run db:seed && npm run dev
+```
+
+提交前请跑 `npm run typecheck`，CI 也会跑。
+
+数据来自真实埋点表，本项目**不含任何虚构的指标计算**。种子脚本 `scripts/seed.mjs` 生成的只用于本地演示的随机数据，人名统一用 `pm-demo` / `dev-a` 这类占位值。
 
 ## 常用命令
 

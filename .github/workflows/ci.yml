@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: nuanyu
+          POSTGRES_PASSWORD: nuanyu_dev
+          POSTGRES_DB: nuanyu_analytics
+        ports:
+          - 5433:5432
+        options: >-
+          --health-cmd "pg_isready -U nuanyu -d nuanyu_analytics"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+
+    env:
+      DATABASE_URL: postgresql://nuanyu:nuanyu_dev@localhost:5433/nuanyu_analytics
+      TRACKER_API_KEY: dev-tracker-key
+      ENABLE_PII_STORAGE: 'false'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: 安装依赖
+        run: npm ci
+
+      - name: 建表
+        run: psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f db/schema.sql
+        env:
+          PGPASSWORD: nuanyu_dev
+
+      - name: 类型检查
+        run: npm run typecheck
+
+      - name: 构建
+        run: npm run build
